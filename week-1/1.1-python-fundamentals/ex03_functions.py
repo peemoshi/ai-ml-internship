@@ -41,8 +41,12 @@ def final_grade(assignments: list, exam: float, assignment_weight: float = 0.4) 
     >>> final_grade([80, 90, 100], 70)       # 90*0.4 + 70*0.6
     78.0
     """
-    # TODO: write your code here
-    raise NotImplementedError
+    if assignments:
+        avg_assignments = sum(assignments) / len(assignments)
+    else:
+        avg_assignments = 0
+    final = avg_assignments * assignment_weight + exam * (1 - assignment_weight)
+    return round(final, 2)
 
 
 def apply_curve(scores: list, bonus: float = 5, cap: float = 100) -> list:
@@ -53,8 +57,13 @@ def apply_curve(scores: list, bonus: float = 5, cap: float = 100) -> list:
     >>> apply_curve([90, 97, 60])
     [95, 100, 65]
     """
-    # TODO: write your code here
-    raise NotImplementedError
+    new_scores = []
+    for s in scores:
+        bumped = s + bonus
+        if bumped > cap:
+            bumped = cap
+        new_scores.append(bumped)
+    return new_scores
 
 
 def mean(*values: float):
@@ -67,8 +76,9 @@ def mean(*values: float):
     >>> mean() is None
     True
     """
-    # TODO: write your code here
-    raise NotImplementedError
+    if not values:
+        return None
+    return sum(values) / len(values)
 
 
 def subject_report(name: str, **scores: float) -> str:
@@ -82,8 +92,17 @@ def subject_report(name: str, **scores: float) -> str:
     >>> subject_report("Dana")
     'Dana: no scores'
     """
-    # TODO: write your code here
-    raise NotImplementedError
+    if not scores:
+        return f"{name}: no scores"
+    parts = []
+    for subject in sorted(scores.keys()):
+        v = scores[subject]
+        if isinstance(v, float) and v.is_integer():
+            v_str = str(int(v))
+        else:
+            v_str = str(v)
+        parts.append(f"{subject}={v_str}")
+    return f"{name}: " + ", ".join(parts)
 
 
 def is_palindrome(text: str) -> bool:
@@ -97,8 +116,8 @@ def is_palindrome(text: str) -> bool:
     >>> is_palindrome("Python")
     False
     """
-    # TODO: write your code here
-    raise NotImplementedError
+    cleaned = "".join(ch.lower() for ch in text if ch.isalnum())
+    return cleaned == cleaned[::-1]
 
 
 if __name__ == "__main__":
