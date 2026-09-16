@@ -1,0 +1,12 @@
+student_id,name,course,score
+S001,Aru Nurlanovna,Python,88
+S001,aru nurlanovna,Statistics,92
+S002,  Dana  Sadykova ,Python,95
+S002,Dana Sadykova,Statistics,
+S003,Timur Akhmetov,Python,abc
+S003,Timur Akhmetov,Statistics,71
+S004,Mei Chan,Python,105
+S004,Mei Chan,Statistics,87
+,Unknown Person,Python,60
+S005,Lucas Martin,Python,64.5
+S005,Lucas Martin,Statistics,58
