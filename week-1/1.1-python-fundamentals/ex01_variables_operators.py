@@ -37,8 +37,11 @@ def seconds_to_hms(total_seconds: int) -> tuple:
     >>> seconds_to_hms(59)
     (0, 0, 59)
     """
-    # TODO: write your code here
-    raise NotImplementedError
+    hours = total_seconds // 3600
+    remaining = total_seconds % 3600
+    minutes = remaining // 60
+    seconds = remaining % 60
+    return (hours, minutes, seconds)
 
 
 def average_of_three(a: float, b: float, c: float) -> float:
@@ -47,8 +50,8 @@ def average_of_three(a: float, b: float, c: float) -> float:
     >>> average_of_three(70, 85, 90)
     81.67
     """
-    # TODO: write your code here
-    raise NotImplementedError
+    avg = (a + b + c) / 3
+    return round(avg, 2)
 
 
 def is_even(n: int) -> bool:
@@ -61,8 +64,7 @@ def is_even(n: int) -> bool:
     >>> is_even(7)
     False
     """
-    # TODO: write your code here
-    raise NotImplementedError
+    return n % 2 == 0
 
 
 def split_bill(total: float, people: int, tip_percent: float = 10) -> float:
@@ -75,8 +77,9 @@ def split_bill(total: float, people: int, tip_percent: float = 10) -> float:
     >>> split_bill(100, 3, tip_percent=0)
     33.33
     """
-    # TODO: write your code here
-    raise NotImplementedError
+    total_with_tip = total * (1 + tip_percent / 100)
+    per_person = total_with_tip / people
+    return round(per_person, 2)
 
 
 def format_student_card(name: str, age: int, gpa: float) -> str:
@@ -87,8 +90,7 @@ def format_student_card(name: str, age: int, gpa: float) -> str:
     >>> format_student_card("Aru", 20, 3.7)
     'Name: Aru | Age: 20 | GPA: 3.70'
     """
-    # TODO: write your code here
-    raise NotImplementedError
+    return f"Name: {name} | Age: {age} | GPA: {gpa:.2f}"
 
 
 if __name__ == "__main__":
