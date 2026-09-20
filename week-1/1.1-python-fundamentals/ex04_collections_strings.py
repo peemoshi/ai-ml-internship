@@ -42,8 +42,16 @@ def average_scores(students: list) -> dict:
     >>> average_scores(STUDENTS)["Dana"]
     94.3
     """
-    # TODO: write your code here
-    raise NotImplementedError
+    result = {}
+    for s in students:
+        name = s.get("name")
+        scores = s.get("scores", [])
+        if scores:
+            avg = sum(scores) / len(scores)
+        else:
+            avg = 0
+        result[name] = round(avg, 1)
+    return result
 
 
 def top_student(students: list) -> tuple:
@@ -54,8 +62,11 @@ def top_student(students: list) -> tuple:
     >>> top_student(STUDENTS)
     ('Dana', 94.3)
     """
-    # TODO: write your code here
-    raise NotImplementedError
+    if not students:
+        return None
+    avgs = average_scores(students)
+    best_name = max(avgs, key=lambda k: avgs[k])
+    return (best_name, avgs[best_name])
 
 
 def group_by_major(students: list) -> dict:
@@ -64,8 +75,14 @@ def group_by_major(students: list) -> dict:
     >>> group_by_major(STUDENTS)
     {'AI': ['Aru', 'Timur'], 'EdTech': ['Dana', 'Mei']}
     """
-    # TODO: write your code here
-    raise NotImplementedError
+    groups = {}
+    for s in students:
+        major = s.get("major")
+        name = s.get("name")
+        groups.setdefault(major, []).append(name)
+    for major in groups:
+        groups[major].sort()
+    return groups
 
 
 def course_overlap(courses_a: list, courses_b: list) -> dict:
@@ -77,8 +94,13 @@ def course_overlap(courses_a: list, courses_b: list) -> dict:
     >>> course_overlap(["AI", "Math", "AI"], ["Math", "Design"])["shared"]
     {'Math'}
     """
-    # TODO: write your code here
-    raise NotImplementedError
+    set_a = set(courses_a)
+    set_b = set(courses_b)
+    return {
+        "shared": set_a & set_b,
+        "only_a": set_a - set_b,
+        "only_b": set_b - set_a,
+    }
 
 
 def word_frequency(text: str, top_n: int = 3) -> list:
@@ -92,8 +114,18 @@ def word_frequency(text: str, top_n: int = 3) -> list:
     >>> word_frequency("AI helps learning. Learning helps AI, and AI helps teachers!", 2)
     [('ai', 3), ('helps', 3)]
     """
-    # TODO: write your code here
-    raise NotImplementedError
+    if not text:
+        return []
+    # remove specified punctuation and normalize case
+    cleaned = text.lower()
+    for ch in ".,!?:;":
+        cleaned = cleaned.replace(ch, "")
+    words = cleaned.split()
+    counts = {}
+    for w in words:
+        counts[w] = counts.get(w, 0) + 1
+    items = sorted(counts.items(), key=lambda kv: (-kv[1], kv[0]))
+    return items[:top_n]
 
 
 def clean_name(raw: str) -> str:
@@ -105,8 +137,9 @@ def clean_name(raw: str) -> str:
     >>> clean_name("   aRU    nURLAN ")
     'Aru Nurlan'
     """
-    # TODO: write your code here
-    raise NotImplementedError
+    parts = raw.split()
+    cleaned = " ".join(parts)
+    return cleaned.title()
 
 
 if __name__ == "__main__":
