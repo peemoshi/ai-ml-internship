@@ -34,8 +34,9 @@ def count_lines(path: str) -> int:
 
 def save_notes(path: str, notes: list) -> None:
     """Exercise 5.1 — Write each note on its own line (overwrite the file)."""
-    # TODO: write your code here
-    raise NotImplementedError
+    with open(path, "w", encoding="utf-8") as f:
+        for note in notes:
+            f.write(f"{note}\n")
 
 
 def load_notes(path: str) -> list:
@@ -45,8 +46,13 @@ def load_notes(path: str) -> list:
     - If the file does not exist, return an empty list (do not crash).
       Hint: catch FileNotFoundError specifically.
     """
-    # TODO: write your code here
-    raise NotImplementedError
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            lines = [line.rstrip("\n") for line in f]
+    except FileNotFoundError:
+        return []
+    # skip blank lines
+    return [line for line in lines if line.strip()]
 
 
 def read_scores_csv(path: str) -> tuple:
@@ -61,8 +67,28 @@ def read_scores_csv(path: str) -> tuple:
 
     Hint: csv.DictReader + enumerate(reader, start=2).
     """
-    # TODO: write your code here
-    raise NotImplementedError
+    valid_rows = []
+    bad_lines = []
+    with open(path, "r", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        # start=2 because header is line 1
+        for lineno, row in enumerate(reader, start=2):
+            name = row.get("name", "").strip()
+            score_raw = row.get("score", "")
+            try:
+                if score_raw is None or score_raw == "":
+                    raise ValueError()
+                # ensure it's an integer string (no decimals)
+                if str(int(float(score_raw))) != str(float(score_raw)).rstrip(".0") and "." in str(score_raw):
+                    # handles things like '88.0' vs '88.5'
+                    # we'll attempt int conversion directly and fail for non-whole numbers
+                    pass
+                score = int(score_raw)
+            except Exception:
+                bad_lines.append(lineno)
+                continue
+            valid_rows.append({"name": name, "score": score})
+    return (valid_rows, bad_lines)
 
 
 def write_summary_csv(path: str, averages: dict) -> None:
@@ -77,8 +103,11 @@ def write_summary_csv(path: str, averages: dict) -> None:
 
     Hint: csv.writer, and open the file with newline="".
     """
-    # TODO: write your code here
-    raise NotImplementedError
+    with open(path, "w", encoding="utf-8", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerow(["name", "average"])
+        for name in sorted(averages.keys()):
+            writer.writerow([name, averages[name]])
 
 
 def append_log(path: str, message: str) -> int:
@@ -87,8 +116,12 @@ def append_log(path: str, message: str) -> int:
     Create the file if it doesn't exist. Return how many lines the file
     has AFTER appending.
     """
-    # TODO: write your code here
-    raise NotImplementedError
+    # append the message as a new line (create file if missing)
+    with open(path, "a", encoding="utf-8") as f:
+        f.write(f"{message}\n")
+    # count lines after appending
+    with open(path, "r", encoding="utf-8") as f:
+        return sum(1 for _ in f)
 
 
 if __name__ == "__main__":
