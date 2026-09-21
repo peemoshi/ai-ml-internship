@@ -51,24 +51,27 @@ class Student:
     """
 
     def __init__(self, name: str, student_id: str):
-        # TODO: write your code here
-        raise NotImplementedError
+        self.name = name
+        self.student_id = student_id
+        self.scores = {}
 
     def add_score(self, course: str, score: float) -> None:
         """Store a score for a course (overwrites an existing one).
         Raise ValueError if the score is outside 0–100."""
-        # TODO: write your code here
-        raise NotImplementedError
+        if score < 0 or score > 100:
+            raise ValueError("Score must be between 0 and 100")
+        self.scores[course] = score
 
     def average(self) -> float:
         """Average of all scores, rounded to 2 decimals. 0.0 if there are none."""
-        # TODO: write your code here
-        raise NotImplementedError
+        if not self.scores:
+            return 0.0
+        avg = sum(self.scores.values()) / len(self.scores)
+        return round(avg, 2)
 
     def __str__(self) -> str:
         """Format: 'Aru (S001) - avg 88.50'  (always 2 decimals)."""
-        # TODO: write your code here
-        raise NotImplementedError
+        return f"{self.name} ({self.student_id}) - avg {self.average():.2f}"
 
 
 class ExchangeStudent(Student):
@@ -80,12 +83,12 @@ class ExchangeStudent(Student):
     """
 
     def __init__(self, name: str, student_id: str, home_university: str):
-        # TODO: write your code here
-        raise NotImplementedError
+        super().__init__(name, student_id)
+        self.home_university = home_university
 
     def __str__(self) -> str:
-        # TODO: write your code here
-        raise NotImplementedError
+        base = super().__str__()
+        return f"{base} [exchange: {self.home_university}]"
 
 
 class Course:
@@ -95,24 +98,29 @@ class Course:
     """
 
     def __init__(self, code: str, capacity: int):
-        # TODO: write your code here
-        raise NotImplementedError
+        self.code = code
+        self.capacity = capacity
+        self.students = []
 
     def enroll(self, student: Student) -> bool:
         """Add a student. Return False (and don't add) if the course is full
         or a student with the same student_id is already enrolled."""
-        # TODO: write your code here
-        raise NotImplementedError
+        if len(self.students) >= self.capacity:
+            return False
+        for s in self.students:
+            if s.student_id == student.student_id:
+                return False
+        self.students.append(student)
+        return True
 
     def roster(self) -> list:
         """Alphabetically sorted list of enrolled students' names."""
-        # TODO: write your code here
-        raise NotImplementedError
+        names = [s.name for s in self.students]
+        return sorted(names)
 
     def __len__(self) -> int:
         """len(course) returns the number of enrolled students."""
-        # TODO: write your code here
-        raise NotImplementedError
+        return len(self.students)
 
 
 if __name__ == "__main__":
