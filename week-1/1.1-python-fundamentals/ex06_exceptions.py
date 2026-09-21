@@ -55,8 +55,10 @@ def safe_divide(a: float, b: float):
     >>> safe_divide(1, 0) is None
     True
     """
-    # TODO: write your code here
-    raise NotImplementedError
+    try:
+        return a / b
+    except ZeroDivisionError:
+        return None
 
 
 def parse_age(text: str) -> int:
@@ -69,8 +71,14 @@ def parse_age(text: str) -> int:
     >>> parse_age(" 21 ")
     21
     """
-    # TODO: write your code here
-    raise NotImplementedError
+    s = text.strip()
+    try:
+        age = int(s)
+    except ValueError:
+        raise ValueError("Age must be a whole number")
+    if age < 0 or age > 120:
+        raise ValueError("Age must be between 0 and 120")
+    return age
 
 
 class InvalidScoreError(ValueError):
@@ -89,8 +97,12 @@ def validate_score(score) -> float:
     >>> validate_score(88.5)
     88.5
     """
-    # TODO: write your code here
-    raise NotImplementedError
+    # reject bool explicitly (bool is subclass of int)
+    if isinstance(score, bool) or not isinstance(score, (int, float)):
+        raise TypeError
+    if score < 0 or score > 100:
+        raise InvalidScoreError()
+    return score
 
 
 def ask_age(attempts: int = 3, input_func=input):
@@ -102,8 +114,16 @@ def ask_age(attempts: int = 3, input_func=input):
     - Use parse_age(). On ValueError, print the error message and try again.
     - Return the age once valid, or None after `attempts` failed tries.
     """
-    # TODO: write your code here
-    raise NotImplementedError
+    tries = 0
+    while tries < attempts:
+        tries += 1
+        text = input_func("Enter your age: ")
+        try:
+            return parse_age(text)
+        except ValueError as e:
+            print(e)
+            continue
+    return None
 
 
 def load_config(path: str) -> dict:
@@ -113,8 +133,13 @@ def load_config(path: str) -> dict:
     - Broken JSON   -> raise ValueError("Config file is not valid JSON")
                        (use `raise ... from error` to keep the original cause).
     """
-    # TODO: write your code here
-    raise NotImplementedError
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return {}
+    except json.JSONDecodeError as e:
+        raise ValueError("Config file is not valid JSON") from e
 
 
 if __name__ == "__main__":
